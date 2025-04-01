@@ -25,7 +25,7 @@ class GameController (object):
         self.setBackground ()
         self.nodes = NodeGroup()
         self.nodes.setupTestNodes()
-        self.pacman = Pacman()
+        self.pacman = Pacman(self.nodes.nodeListe[0])
         
     def update (self):
         dt = self.clock.tick(30)/1000.0 # renvoie le temps écoulé en millis depuis dernier appel
