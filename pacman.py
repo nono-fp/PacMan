@@ -1,27 +1,23 @@
-# -*- coding: utf-8 -*-
-import pygame as py
+import pygame
 from pygame.locals import *
+from vector import Vector2
 from constants import *
-from Vecteurs import Vecteur2D
-
 
 class Pacman(object):
-    
-    def __init__(self):
+    def __init__(self, node):
         self.name = PACMAN
-        #self.position = Vecteur2D(LARGEUR_FENETRE // 2, HAUTEUR_FENETRE // 2)
-        self.directions = {STOP:Vecteur2D(),UP:Vecteur2D(0,-1), DOWN:Vecteur2D(0,1), RIGHT:Vecteur2D(1,0), LEFT : Vecteur2D(-1,0)}
+        self.directions = {STOP:Vector2(), UP:Vector2(0,-1), DOWN:Vector2(0,1), LEFT:Vector2(-1,0), RIGHT:Vector2(1,0)}
         self.direction = STOP
-        self.speed = 100 * LARGEUR_DE_TUILE /20
+        self.speed = 100 * TILEWIDTH/16
         self.radius = 10
         self.color = YELLOW
         self.node = node
         self.setPosition()
-        
+
     def setPosition(self):
         self.position = self.node.position.copy()
-        
-    def update(self,dt):
+
+    def update(self, dt):	
         #self.position += self.directions[self.direction]*self.speed*dt
         direction = self.getValidKey()
         self.direction = direction
@@ -30,17 +26,17 @@ class Pacman(object):
         
     def validDirection(self, direction):
         if direction is not STOP:
-            if self.node.voisins[direction] is not None:
+            if self.node.neighbors[direction] is not None:
                 return True
         return False
 
     def getNewTarget(self, direction):
         if self.validDirection(direction):
-            return self.node.voisins[direction]
+            return self.node.neighbors[direction]
         return self.node
-        
+
     def getValidKey(self):
-        key_pressed = py.key.get_pressed()
+        key_pressed = pygame.key.get_pressed()
         if key_pressed[K_UP]:
             return UP
         if key_pressed[K_DOWN]:
@@ -50,7 +46,7 @@ class Pacman(object):
         if key_pressed[K_RIGHT]:
             return RIGHT
         return STOP
-    
+
     def render(self, screen):
-        p =self.position.asInt()
-        py.draw.circle(screen,self.color, p , self.radius)
+        p = self.position.asInt()
+        pygame.draw.circle(screen, self.color, p, self.radius)
