@@ -5,7 +5,7 @@ from constants import *
 
 class Pacman(object):
     def __init__(self, node):
-        self.name = PACMAN
+        self.name = 'PACMAN'
         self.directions = {STOP:Vector2(), UP:Vector2(0,-1), DOWN:Vector2(0,1), LEFT:Vector2(-1,0), RIGHT:Vector2(1,0)}
         self.direction = STOP
         self.speed = 100 * TILEWIDTH/16
@@ -26,9 +26,14 @@ class Pacman(object):
             self.target = self.getNewTarget(direction)
             if self.target is not self.node :
                 self.direction = direction
-            else :
+            else:
+                self.target = self.getNewTarget(self.direction)
+            if self.target is self.node:
                 self.direction = STOP
             self.setPosition()
+        else: 
+            if self.oppositeDirection(direction):
+                self.reverseDirection()
                 
     def validDirection(self, direction):
         if direction is not STOP:
@@ -60,6 +65,18 @@ class Pacman(object):
             node2Target = vec1.magnitudeSquared()
             node2Self = vec2.magnitudeSquared()
             return node2Self >= node2Target
+        return False
+    
+    def reverseDirection(self):
+        self.direction *= -1
+        temp = self.node
+        self.node = self.target
+        self.target = temp
+        
+    def oppositeDirection(self, direction):
+        if direction is not STOP:
+            if direction == self.direction * -1:
+                return True 
         return False
             
     def render(self, screen):
