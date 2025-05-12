@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 TILEWIDTH = 20
 TILEHEIGHT = 20
 NCOLS = 40 # NCOLS
@@ -17,8 +16,10 @@ UP = 1
 DOWN = 2
 LEFT = 3
 RIGHT = 4
-
-
+PORTAL = 3 #nbr aléatoire pas d'importance
+PACMAN = 0
+PELLET  = 1
+POWERPELLET = 2
 """"
 
 X" : espace vide
