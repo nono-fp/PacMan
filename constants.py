@@ -20,6 +20,7 @@ PORTAL = 3 #nbr aléatoire pas d'importance
 PACMAN = 0
 PELLET  = 1
 POWERPELLET = 2
+GHOST = 3
 """"
 
 X" : espace vide
