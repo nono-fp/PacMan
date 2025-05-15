@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 TILEWIDTH = 20
 TILEHEIGHT = 20
 NCOLS = 40 # NCOLS
@@ -21,6 +22,10 @@ PACMAN = 0
 PELLET  = 1
 POWERPELLET = 2
 GHOST = 3
+SCATTER = 0 #dispersion
+CHASE = 1 #poursuite
+FREIGHT = 2 #fret
+SPAWN = 3 # apparition
 """"
 
 X" : espace vide
@@ -29,4 +34,8 @@ X" : espace vide
 
 ".": Chemin vertical / horizontal
 
+"""
+"""
+mode dispersion : 7 secondes
+mode poursuite : 20 secondes
 """
