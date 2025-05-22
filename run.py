@@ -5,7 +5,7 @@ from constants import *
 from pacman import Pacman
 from nodes import NodeGroup
 from pellets import PelletGroup
-from ghosts import Ghost
+from ghosts import GhostGroup
 
 class GameController(object):
     def __init__(self):
@@ -25,19 +25,31 @@ class GameController(object):
      homekey = self.nodes.createHomeNodes(17.5, 10)
      self.nodes.connectHomeNodes(homekey, (18,10), LEFT)
      self.nodes.connectHomeNodes(homekey, (21,10), RIGHT)
-     self.pacman = Pacman(self.nodes.getStartTempNode())
+     self.pacman = Pacman(self.nodes.getNodeFromTiles(21, 22))
      self.pellets = PelletGroup("maze1.txt")
-     self.ghost = Ghost(self.nodes.getStartTempNode(), self.pacman)
+     self.ghosts = GhostGroup(self.nodes.getStartTempNode(), self.pacman)
+     self.ghosts.blinky.setStartNode(self.nodes.getNodeFromTiles(2+17.5, 0+10))
+     self.ghosts.pinky.setStartNode(self.nodes.getNodeFromTiles(2+17.5, 3+10))
+     self.ghosts.inky.setStartNode(self.nodes.getNodeFromTiles(0+17.5, 3+10))
+     self.ghosts.clyde.setStartNode(self.nodes.getNodeFromTiles(4+17.5, 3+10))
+     self.ghosts.setSpawnNode(self.nodes.getNodeFromTiles(2+17.5, 3+10))
 
     def update(self):
         dt = self.clock.tick(30) / 1000.0
         self.pacman.update(dt)
-        self.ghost.update(dt)
+        self.ghosts.update(dt)
         self.pellets.update(dt)
         self.checkPelletEvents()
+        self.checkGhostEvents()
         self.checkEvents()
         self.render()
 
+    def checkGhostEvents(self):
+        for ghost in self.ghosts:
+            if self.pacman.collideGhost(ghost):
+                if ghost.mode.current is FREIGHT:
+                    ghost.startSpawn()
+               
     def checkEvents(self):
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -52,14 +64,14 @@ class GameController(object):
             self.pellets.numEaten += 1
             self.pellets.pelletList.remove(pellet) 
             if pellet.name == POWERPELLET :
-                self.ghost.startFreight()
+                self.ghosts.startFreight()
             
     def render(self):
         self.screen.blit(self.background, (0, 0))
         self.nodes.render(self.screen)
         self.pellets.render(self.screen)
         self.pacman.render(self.screen)
-        self.ghost.render(self.screen)
+        self.ghosts.render(self.screen)
         pygame.display.update()
 
     
