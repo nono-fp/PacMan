@@ -16,14 +16,22 @@ class Entity (object):
         self.radius = 10
         self.collideRadius = 5
         self.color = WHITE
-        self.node = node
-        self.setPosition()
-        self.target = node
+
         self.visible = True
         self.disablePortal = False
         self.goal = None
-        self.directionMethod = self.randomDirection
+        self.directionMethod = self.goalDirection
+        self.setStartNode(node)
+
+    def setStartNode(self, node):
+        self.node = node
+        self.startNode = node
+        self.target = node
+        self.setPosition()
+
     
+    def setPosition(self):
+        self.position = self.node.position.copy()
     
     def update(self, dt):
         self.position += self.directions[self.direction]*self.speed*dt
@@ -43,6 +51,15 @@ class Entity (object):
 
             self.setPosition()
             
+            
+    def validDirection(self, direction):
+        if direction is not STOP:
+            if self.node.neighbors[direction] is not None:
+                return True
+        return False
+    
+    
+    
     def validDirections(self):
         directions = []
         for key in [UP, DOWN, LEFT, RIGHT]:
@@ -56,15 +73,6 @@ class Entity (object):
     def randomDirection(self, directions):
         return directions[randint(0, len(directions)-1)]
 
-        
-    def setPosition(self):
-        self.position = self.node.position.copy()
-          
-    def validDirection(self, direction):
-        if direction is not STOP:
-            if self.node.neighbors[direction] is not None:
-                return True
-        return False
 
     def getNewTarget(self, direction):
         if self.validDirection(direction):
